@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+  <title>Lo-Dash Join plugin benchmarks</title>
+  <style type="text/css">
+    #caption {
+      border: 2pt solid #696969;
+      border-radius: 8pt;
+      background-color: #90ee90;
+      padding: 8pt;
+      font-family: sans-serif;
+      font-size: 16pt;
+    }
+
+    .benchmark {
+      border: 1pt solid #696969;
+      border-radius: 8pt;
+      background-color: #d3d3d3;
+      margin-top: 10pt;
+      padding: 8pt;
+      font-family: sans-serif;
+    }
+
+    .header {
+      position: relative;
+      padding-bottom: 4pt;
+      padding-left: 4pt;
+      font-size: 14pt;
+    }
+
+    .running {
+      position: absolute;
+      padding-right: 4pt;
+      right: 0;
+      width: 18pt;
+      height: 18pt;
+    }
+
+    .item {
+      border-top: 1pt solid #696969;
+      padding-top: 4pt;
+      padding-left: 8pt;
+      padding-bottom: 4pt;
+      font-size: 12pt;
+    }
+
+    .footer {
+      border-top: 1pt solid #696969;
+      padding-top: 4pt;
+      padding-left: 4pt;
+      font-size: 14pt;
+    }
+  </style>
+  <script src="../libs/lodash/lodash.min.js"></script>
+  <script src="../libs/benchmark/benchmark.js"></script>
+  <script src="../libs/linq/linq.min.js"></script>
+  <script src="../libs/jslinq/jslinq.min.js"></script>
+  <script src="../lodash-join-plugin.min.js"></script>
+  <script src="data.js"></script>
+  <script src="perf.js"></script>
+</head>
+<body>
+  <div id="caption">Lo-Dash Join plugin benchmarks</div>
+</body>
+</html>

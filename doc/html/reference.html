@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+<head>
+  <title>Lo-Dash Join plugin reference</title>
+  <link rel="stylesheet" href="bootstrap.min.css" />
+  <style type="text/css">
+    body { margin: 20px; }
+	.function {
+      display: inline-block;	
+	  white-space: inherit;
+	  line-height: 200%;
+    }
+  </style>
+</head>
+<body>
+<h1 id="lo-dash-join-plugin-wzxhzdk24v01wzxhzdk25">Lo-Dash Join plugin <sup>v0.1</sup></h1>
+
+<h2 id="wzxhzdk26wzxhzdk27arrays"><a id="Arrays"></a><code>Arrays</code></h2>
+<ul>
+<li><a href="#uniquejoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"><code>uniqueJoin</code></a></li>
+</ul>
+
+<h2 id="collections"><code>Collections</code></h2>
+<ul>
+<li><a href="#groupjoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"><code>groupJoin</code></a></li>
+<li><a href="#hashjoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"><code>hashJoin</code></a></li>
+<li><a href="#mergejoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outersorted-innersorted-outerthis-innerthis-resultthis"><code>mergeJoin</code></a></li>
+</ul>
+
+<h2 id="arrays-methods"><code>"Arrays" Methods</code></h2>
+
+<h3 id="wzxhzdk28wzxhzdk29uniquejoinoutercollection-innercollection-outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"><a id="uniquejoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"></a><code class="function">uniqueJoin(outerCollection, innerCollection [, outerKey=identity, innerKey=identity, resultSelector=identity, outerThis, innerThis, resultThis])</code></h3>
+<p><a href="#uniquejoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis">#</a> <a href="#L526" title="View in source">&#x24C8;</a> <a href="#Arrays" title="Jump back to the TOC.">&#x24C9;</a></p>
+<p>Accepts two collections for join, where <code>outerCollection</code> <b>is sorted by unique key</b> and <code>innerCollection</code> <b>is sorted by same key</b> <em>(may be not unique)</em>. Creates an array of pairs <code>[leftElement, rightElement]</code> <em>(or results returned by function <code>resultSelector</code>)</em>. This array is a result of algorithm like SQL INNER  JOIN of two collections.</p>
+<p>Keys for joining are computed by invoking key selection functions <code>outerKey</code> and <code>innerKey</code> on elements of each collection. Key and result selectors are bound to <code>outerThis</code>, <code>innerThis</code> and <code>resultThis</code>. Key selectors invoked with three arguments; <em>(value, index|key, collection)</em>. Result selector invoked with six arguments <em>(leftValue, rightValue, leftIndex, rightIndex, leftCollection, rightCollection)</em>. If <code>resultSelector</code> returns <code>null</code> or <code>undefined</code>, this value will not be added to the collection of results.</p>
+<p>If a property name is passed for one of key selectors, the created "_.pluck" style selector will return the property value of the given element.</p>
+<p>If an object is passed for one of key selectors, the created "_.where" style selector will return <code>true</code> for elements that have the properties of the given object, else <code>false</code>.</p>
+<p>This method merges two sorted collections. Complexity of algorithm is linear.</p>
+<h4 id="arguments">Arguments</h4>
+<ol>
+<li><code>outerCollection</code> <em>(Array)</em>: The left operand of JOIN.</li>
+<li><code>innerCollection</code> <em>(Array)</em>: The right operand of JOIN.</li>
+<li><code>[outerKey=identity]</code> <em>(Function|Object|String)</em>: The function invoked on each object form left collection to get the key for JOIN. If a property name or object is passed, it will be used to create a "<em>.pluck" or "</em>.where" style callback, respectively.</li>
+<li><code>[innerKey=identity]</code> <em>(Function|Object|String)</em>: The function invoked on each object form right collection to get the key for JOIN. If a property name or object is passed, it will be used to create a "<em>.pluck" or "</em>.where" style callback, respectively.</li>
+<li><code>[resultSelector=identity]</code> <em>(Function|Any)</em>: The function invoked on each pair of joined objects from two collections. If it is undefined, the result collection consists of arrays like <code>[leftObj, rightObj]</code>. If it is not a function, the result collection consists of same values that equals <code>resultSelector</code>.</li>
+<li><code>[outerThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>outerKey</code> function.</li>
+<li><code>[innerThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>innerKey</code> function.</li>
+<li><code>[resultThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>resultSelector</code> function.</li>
+</ol>
+<h4 id="returns">Returns</h4>
+<p><em>(Array)</em>: Returns the joined collection of objects.</p>
+<h4 id="example">Example</h4>
+<pre><code class="js">_([1, 3, 5, 7])
+  .uniqueJoin([3, 3, 4, 5, 6, 7, 7, 8],
+    function(x) { return x; },
+    function(x) { return x; },
+    function(l, r) { return l == r &amp;&amp; l; })
+  .value();
+// =&gt; [3, 3, 5, 7, 7]
+
+// no key and result selectors
+_.uniqueJoin([1, 2, 3], [1, 2]);
+// =&gt; [[1, 1], [2, 2]]
+
+// filter results by `resultSelector`
+_.uniqueJoin([1, 2], [1, 2],
+    function(x) { return x; },
+    function(x) { return x; },
+    function(l, r) { if (l == 1) return [l, r]; }
+);
+// =&gt; [[1, 1]]
+</code></pre>
+
+<hr />
+
+<h2 id="collections-methods"><code>"Collections" Methods</code></h2>
+
+<h3 id="wzxhzdk38wzxhzdk39groupjoinoutercollection-innercollection-outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"><a id="groupjoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"></a><code class="function">groupJoin(outerCollection, innerCollection [, outerKey=identity, innerKey=identity, resultSelector=identity, outerThis, innerThis, resultThis])</code></h3>
+<p><a href="#groupjoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis">#</a> <a href="#L229" title="View in source">&#x24C8;</a> <a href="#Arrays" title="Jump back to the TOC.">&#x24C9;</a></p>
+<p>Creates an array of pairs <code>[leftElement, [rightGroup]]</code> <em>(or results returned by function <code>resultSelector</code>)</em>. This array is a result of algorithm like SQL LEFT OUTER JOIN of two collections <code>outerCollection</code> and <code>innerCollection</code>. But in the result collection each object from <code>outerCollection</code> corresponds to group of elements from <code>innerCollection</code>. All elements in group have identically key.</p>
+<p>Keys for joining are computed by invoking key selection functions <code>outerKey</code> and <code>innerKey</code> on elements of each collection. Key and result selectors are bound to <code>outerThis</code>, <code>innerThis</code> and <code>resultThis</code>. Key selectors invoked with three arguments; <em>(value, index|key, collection)</em>. Result selector invoked with four arguments <em>(leftValue, rightGroup , leftIndex, leftCollection)</em>. If <code>resultSelector</code> returns <code>null</code> or <code>undefined</code>, this value will not be added to the collection of results.</p>
+<p>If a property name is passed for one of key selectors, the created "_.pluck" style selector will return the property value of the given element.</p>
+<p>If an object is passed for one of key selectors, the created "_.where" style selector will return <code>true</code> for elements that have the properties of the given object, else <code>false</code>.</p>
+<p>This method puts <code>innerCollection</code> into hash table and iterates over elements of <code>outerCollection</code>.</p>
+<h4 id="arguments_1">Arguments</h4>
+<ol>
+<li><code>outerCollection</code> <em>(Array|Object|String)</em>: The left operand of JOIN.</li>
+<li><code>innerCollection</code> <em>(Array|Object|String)</em>: The right operand of JOIN.</li>
+<li><code>[outerKey=identity]</code> <em>(Function|Object|String)</em>: The function invoked on each object form left collection to get the key for JOIN. If a property name or object is passed, it will be used to create a "<em>.pluck" or "</em>.where" style callback, respectively.</li>
+<li><code>[innerKey=identity]</code> <em>(Function|Object|String)</em>: The function invoked on each object form right collection to get the key for JOIN. If a property name or object is passed, it will be used to create a "<em>.pluck" or "</em>.where" style callback, respectively.</li>
+<li><code>[resultSelector=identity]</code> <em>(Function)</em>: The function invoked on each object from outer collection and corresponding to it group from inner collection. If it is undefined, the result collection consists of arrays like <code>[leftObj, [rightGroup]]</code>. If it is not a function, an exception was thrown.</li>
+<li><code>[outerThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>outerKey</code> function.</li>
+<li><code>[innerThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>innerKey</code> function.</li>
+<li><code>[resultThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>resultSelector</code> function.</li>
+</ol>
+<h4 id="returns_1">Returns</h4>
+<p><em>(Array)</em>: Returns the joined collection of objects.</p>
+<h4 id="example_1">Example</h4>
+<pre><code class="js">var peoples = [
+  { name: 'John', surname: 'Tyler' },
+  { name: 'John', surname: 'Smith' },
+  { name: 'Robert', surname: 'Bishop' }
+];
+
+_(peoples)
+  .groupJoin(peoples,
+    function(p) { return p.name; },
+    function(p) { return p.name; },
+    function(l, rGr) { return l.surname + ': ' + rGr.length; })
+  .value();
+// =&gt; ['Tyler: 2', 'Smith: 2', 'Bishop: 1']
+
+// using &quot;_.pluck&quot; callback shorthand
+_.groupJoin([{ id: 1, name: 'John' }], [[1, 200], [1, 300]], 'id', 0,
+    function(l, rGr) {
+      return l.name + ': ' +
+      _.reduce(rGr, function(s, el) { return s + el[1]; }, 0);
+    });
+// =&gt; ['John: 500']
+
+// no key and result selectors
+_.groupJoin([1, 2, 3], [1, 1, 2]);
+// =&gt; [[1, [1, 1]], [2, [2]], [3, []]]
+
+// filter results by `resultSelector`
+_.groupJoin([1, 2], [2, 1, 2],
+    function(x) { return x; },
+    function(x) { return x; },
+    function(l, rGr) { if (rGr.length &gt; 1) return [l, rGr]; }
+);
+// =&gt; [[2, [2, 2]]]
+</code></pre>
+
+<hr />
+
+<h3 id="wzxhzdk44wzxhzdk45hashjoinoutercollection-innercollection-outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"><a id="hashjoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis"></a><code class="function">hashJoin(outerCollection, innerCollection [, outerKey=identity, innerKey=identity, resultSelector=identity, outerThis, innerThis, resultThis])</code></h3>
+<p><a href="#hashjoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outerthis-innerthis-resultthis">#</a> <a href="#L93" title="View in source">&#x24C8;</a> <a href="#Arrays" title="Jump back to the TOC.">&#x24C9;</a></p>
+<p>Creates an array of pairs <code>[leftElement, rightElement]</code> <em>(or results returned by function <code>resultSelector</code>)</em>. This array is a result of algorithm like SQL INNER JOIN of two collections <code>outerCollection</code> and <code>innerCollection</code>.</p>
+<p>Keys for joining are computed by invoking key selection functions <code>outerKey</code> and <code>innerKey</code> on elements of each collection. Key and result selectors are bound to <code>outerThis</code>, <code>innerThis</code> and <code>resultThis</code>. Key selectors invoked with three arguments; <em>(value, index|key, collection)</em>. Result selector invoked with six arguments <em>(leftValue, rightValue, leftIndex, rightIndex, leftCollection, rightCollection)</em>. If <code>resultSelector</code> returns <code>null</code> or <code>undefined</code>, this value will not be added to the collection of results.</p>
+<p>If a property name is passed for one of key selectors, the created "_.pluck" style selector will return the property value of the given element.</p>
+<p>If an object is passed for one of key selectors, the created "_.where" style selector will return <code>true</code> for elements that have the properties of the given object, else <code>false</code>.</p>
+<p>This method puts <code>innerCollection</code> into hash table and iterates over elements of <code>outerCollection</code>.</p>
+<h4 id="arguments_2">Arguments</h4>
+<ol>
+<li><code>outerCollection</code> <em>(Array|Object|String)</em>: The left operand of JOIN.</li>
+<li><code>innerCollection</code> <em>(Array|Object|String)</em>: The right operand of JOIN.</li>
+<li><code>[outerKey=identity]</code> <em>(Function|Object|String)</em>: The function invoked on each object form left collection to get the key for JOIN. If a property name or object is passed, it will be used to create a "<em>.pluck" or "</em>.where" style callback, respectively.</li>
+<li><code>[innerKey=identity]</code> <em>(Function|Object|String)</em>: The function invoked on each object form right collection to get the key for JOIN. If a property name or object is passed, it will be used to create a "<em>.pluck" or "</em>.where" style callback, respectively.</li>
+<li><code>[resultSelector=identity]</code> <em>(Function|Any)</em>: The function invoked on each pair of joined objects from two collections. If it is undefined, the result collection consists of arrays like <code>[leftObj, rightObj]</code>. If it is not a function, the result collection consists of same values that equals <code>resultSelector</code>.</li>
+<li><code>[outerThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>outerKey</code> function.</li>
+<li><code>[innerThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>innerKey</code> function.</li>
+<li><code>[resultThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>resultSelector</code> function.</li>
+</ol>
+<h4 id="returns_2">Returns</h4>
+<p><em>(Array)</em>: Returns the joined collection of objects.</p>
+<h4 id="example_2">Example</h4>
+<pre><code class="js">var peoples = [
+  { name: 'John', surname: 'Tyler' },
+  { name: 'John', surname: 'Smith' }
+];
+
+_(peoples)
+  .hashJoin(peoples,
+    function(p) { return p.name; },
+    function(p) { return p.name; },
+    function(l, r) { return l.surname + '-' + r.surname; })
+  .value();
+// =&gt; ['Tyler-Tyler', 'Tyler-Smith', 'Smith-Tyler', 'Smith-Smith']
+
+// using &quot;_.pluck&quot; callback shorthand
+_.hashJoin(peoples, peoples, 'name', 'name', 0);
+// =&gt; [0, 0, 0, 0]
+
+// no key and result selectors
+_.hashJoin([1, 2, 3], [3, 1, 2]);
+// =&gt; [[1, 1], [2, 2], [3, 3]]
+
+// filter results by `resultSelector`
+_.hashJoin([1, 2], [2, 1],
+    function(x) { return x; },
+    function(x) { return x; },
+    function(l, r) { if (l == 1) return [l, r]; }
+);
+// =&gt; [[1, 1]]
+</code></pre>
+
+<hr />
+
+<h3 id="wzxhzdk50wzxhzdk51mergejoinoutercollection-innercollection-outerkeyidentity-innerkeyidentity-resultselectoridentity-outersorted-innersorted-outerthis-innerthis-resultthis"><a id="mergejoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outersorted-innersorted-outerthis-innerthis-resultthis"></a><code class="function">mergeJoin(outerCollection, innerCollection [, outerKey=identity, innerKey=identity, resultSelector=identity, outerSorted, innerSorted, outerThis, innerThis, resultThis])</code></h3>
+<p><a href="#mergejoinoutercollection-innercollection--outerkeyidentity-innerkeyidentity-resultselectoridentity-outersorted-innersorted-outerthis-innerthis-resultthis">#</a> <a href="#L338" title="View in source">&#x24C8;</a> <a href="#Arrays" title="Jump back to the TOC.">&#x24C9;</a></p>
+<p>Creates an array of pairs <code>[leftElement, rightElement]</code> <em>(or results returned by function <code>resultSelector</code>)</em>. This array is a result of algorithm like SQL INNER JOIN of two collections <code>outerCollection</code> and <code>innerCollection</code>.</p>
+<p>Keys for joining are computed by invoking key selection functions <code>outerKey</code> and <code>innerKey</code> on elements of each collection. Key and result selectors are bound to <code>outerThis</code>, <code>innerThis</code> and <code>resultThis</code>. Key selectors invoked with three arguments; <em>(value, index|key, collection)</em>. Result selector invoked with six arguments <em>(leftValue, rightValue, leftIndex, rightIndex, leftCollection, rightCollection)</em>. If <code>resultSelector</code> returns <code>null</code> or <code>undefined</code>, this value will not be added to the collection of results.</p>
+<p>If a property name is passed for one of key selectors, the created "_.pluck" style selector will return the property value of the given element.</p>
+<p>If an object is passed for one of key selectors, the created "_.where" style selector will return <code>true</code> for elements that have the properties of the given object, else <code>false</code>.</p>
+<p>This method sorts the two collections based on the keys and then merges them into a collection of results. If collections are already sorted, passing <code>true</code> for <code>outerSorted</code> and <code>innerSorted</code> will run a faster algorithm.</p>
+<h4 id="arguments_3">Arguments</h4>
+<ol>
+<li><code>outerCollection</code> <em>(Array|Object|String)</em>: The left operand of JOIN.</li>
+<li><code>innerCollection</code> <em>(Array|Object|String)</em>: The right operand of JOIN.</li>
+<li><code>[outerKey=identity]</code> <em>(Function|Object|String)</em>: The function invoked on each object form left collection to get the key for JOIN. If a property name or object is passed, it will be used to create a "<em>.pluck" or "</em>.where" style callback, respectively.</li>
+<li><code>[innerKey=identity]</code> <em>(Function|Object|String)</em>: The function invoked on each object form right collection to get the key for JOIN. If a property name or object is passed, it will be used to create a "<em>.pluck" or "</em>.where" style callback, respectively.</li>
+<li><code>[resultSelector=identity]</code> <em>(Function|Any)</em>: The function invoked on each pair of joined objects from two collections. If it is undefined, the result collection consists of arrays like <code>[leftObj, rightObj]</code>. If it is not a function, the result collection consists of same values that equals <code>resultSelector</code>.</li>
+<li><code>[outerSorted]</code> <em>(Boolean)</em>: A flag to indicate that the <code>outerCollection</code> is already sorted.</li>
+<li><code>[innerSorted]</code> <em>(Boolean)</em>: A flag to indicate that the <code>innerCollection</code> is already sorted.</li>
+<li><code>[outerThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>outerKey</code> function.</li>
+<li><code>[innerThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>innerKey</code> function.</li>
+<li><code>[resultThis]</code> <em>(Object)</em>: The <code>this</code> binding of <code>resultSelector</code> function.</li>
+</ol>
+<h4 id="returns_3">Returns</h4>
+<p><em>(Array)</em>: Returns the joined collection of objects.</p>
+<h4 id="example_3">Example</h4>
+<pre><code class="js">var peoples = [
+  { name: 'John', surname: 'Tyler' },
+  { name: 'John', surname: 'Smith' }
+];
+
+_(peoples)
+  .mergeJoin(peoples,
+    function(p) { return p.name; },
+    function(p) { return p.name; },
+    function(l, r) { return l.surname + '-' + r.surname; })
+  .value();
+// =&gt; ['Tyler-Tyler', 'Tyler-Smith', 'Smith-Tyler', 'Smith-Smith']
+
+// using &quot;_.pluck&quot; callback shorthand
+_.mergeJoin(peoples, peoples, 'name', 'name', 0);
+// =&gt; [0, 0, 0, 0]
+
+// no key and result selectors
+_.mergeJoin([1, 2, 3], [3, 1, 2]);
+// =&gt; [[1, 1], [2, 2], [3, 3]]
+
+// filter results by `resultSelector`
+_.mergeJoin([1, 2], [2, 1],
+    function(x) { return x; },
+    function(x) { return x; },
+    function(l, r) { if (l == 1) return [l, r]; }
+);
+// =&gt; [[1, 1]]
+
+// passing `isSorted` flags
+_.mergeJoin([1, 2], [1, 2], null, null, null, true, true);
+// =&gt; [[1, 1], [2, 2]]
+</code></pre>
+
+<hr />
+</body>
+</html>
